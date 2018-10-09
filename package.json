@@ -1,0 +1,25 @@
+{
+  "name": "yarn",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "xo": {
+    "envs": [
+      "node"
+    ],
+    "space": 2,
+    "rules": {
+      "max-len": [
+        "error",
+        80,
+        2
+      ]
+    }
+  },
+  "dependencies": {
+    "diacritics": "^1.3.0",
+    "fast-levenshtein": "^2.0.6",
+    "ramda": "^0.25.0",
+    "xo": "^0.23.0"
+  }
+}
