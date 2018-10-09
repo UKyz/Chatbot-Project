@@ -3,7 +3,7 @@
 ## Contents
   * [Install][Installation]
   * [Check the code style][CheckXo]
-  * [Team][Team]
+  * [Credits][Credits]
 
 ## Install
 
@@ -31,3 +31,7 @@ xo
 [Me]: https://github.com/UKyz
 [Alexandre]: https://github.com/A1C0
 [xo]: https://github.com/xojs/xo
+[Credits]: 
+[Install]: 
+[Code-style]:
+[Credits]: 
