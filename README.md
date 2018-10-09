@@ -18,7 +18,7 @@ xo
 
 ## Credits
   * [Couton Alexia][Alexia] 
-  * [Contassot Victor][Alexandre]
+  * [Contassot Alexandre][Alexandre]
   * [Fauquembergue Victor][Me]
   
   
