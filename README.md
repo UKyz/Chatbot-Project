@@ -31,7 +31,6 @@ xo
 [Me]: https://github.com/UKyz
 [Alexandre]: https://github.com/A1C0
 [xo]: https://github.com/xojs/xo
-[Credits]: 
-[Install]: 
-[Code-style]:
-[Credits]: 
+[Credits]: https://github.com/UKyz/Chatbot-Project/blob/master/README.md#credits
+[Install]: https://github.com/UKyz/Chatbot-Project/blob/master/README.md#install
+[CheckXo]: https://github.com/UKyz/Chatbot-Project/blob/master/README.md#check-xo
