@@ -1,11 +1,15 @@
 # Chatbot-Project [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/xojs/xo)
 
+## Contents
+  * [Install][Installation]
+  * [Check the code style][CheckXo]
+  * [Team][Team]
 
 ## Install
 
 ```
 git clone https://github.com/UKyz/Chatbot-Project.git
-cd TPSevenWondersJS
+cd Chatbot-Project
 yarn install
 ```
 
@@ -26,3 +30,4 @@ xo
 [Alexia]: https://github.com/Alexia14
 [Me]: https://github.com/UKyz
 [Alexandre]: https://github.com/A1C0
+[xo]: https://github.com/xojs/xo
