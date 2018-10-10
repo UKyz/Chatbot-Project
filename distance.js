@@ -1,10 +1,10 @@
 const levenshtein = require('fast-levenshtein');
-const removeDiacritics = require('diacritics').remove;
+const {remove: removeDiacritics} = require('diacritics');
 const R = require('ramda');
 
 const normalizeString_ = R.pipe(
   removeDiacritics(R),
-  R.toLower(),
+  R.toLower()
 );
 
 const listPhrases = [
@@ -17,17 +17,22 @@ const listPhrases = [
 ];
 
 const similarity = (p1, p2) => levenshtein.get(p1, p2);
-const getLength = (p1, p2) => (p1.length >= p2.length) ? p1.length : p2.length;
-const getPourcentage = (sim, len) => Math.round((1 - (sim / len)) * 1000) / 10;
+const getLength = (p1, p2) => {
+  const lp1 = R.length(p1);
+  const lp2 = R.length(p2);
+  return R.gte(lp1, lp2) ? lp1 : lp2;
+};
+const getPercentage = (sim, len) => Math.round((1 - (sim / len)) * 1000) / 10;
 
-const calcPourcentage = (p1, p2, list) => [
+const computePercentage = (p1, p2, list) => [
   R.indexOf(p1, list),
   levenshtein.get(p1, p2),
-  getPourcentage(similarity(p1, p2), getLength(p1, p2))
+  getPercentage(similarity(p1, p2), getLength(p1, p2))
 ];
 
 const calcDistance = R.curry((list, p) => R.map(x =>
-  calcPourcentage(x, p, list), list));
+  computePercentage(x, p, list), list));
+
 const mapDistance = list => R.map(calcDistance(list), list);
 
 const sortByDistance = R.sortBy(R.prop(2));
@@ -36,7 +41,7 @@ const test_ = R.pipe(
   R.map(normalizeString_),
   mapDistance,
   R.map(sortByDistance),
-  R.tap(console.log),
+  R.tap(console.log)
 );
 
 test_(listPhrases);
