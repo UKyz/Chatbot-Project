@@ -14,29 +14,33 @@ const parseFile = R.pipeP(
   R.split('\n'),
 );
 
+const cleanPhrases = R.pipe(
+  removeDiacritics,
+  deleteIgnoredChar,
+  R.split(' ')
+);
+
 const listAllWords = R.pipeP(
-  R.compose(parseFile),
-  R.map(removeDiacritics),
-  R.map(deleteIgnoredChar),
-  R.map(R.split(' ')),
-  R.flatten,
+  parseFile,
+  R.map(cleanPhrases),
+  R.flatten
 );
 
 // Thanks Alexia for this methode
-const getNomberOfWords = R.pipeP(
-  R.compose(listAllWords),
-  R.length,
+const getNumberOfWords = R.pipeP(
+  listAllWords,
+  R.length
 );
 
 const countRecurrences = R.pipeP(
-  R.compose(listAllWords),
-  R.countBy(R.toLower),
+  listAllWords,
+  R.countBy(R.toLower)
 );
 
 module.exports = {
   deleteIgnoredChar,
   parseFile,
   listAllWords,
-  getNomberOfWords,
+  getNumberOfWords,
   countRecurrences
 };

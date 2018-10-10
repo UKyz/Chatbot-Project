@@ -6,28 +6,31 @@ const phrases = ['Je voudrais un ticket pour Lille',
   'J aimerais un billet pour Toulouse',
   'Un vol pour Amsterdam'];
 
-const modifieData_ = R.pipe(
-  R.map(removeDiacritics),
-  R.map(R.replace(/'/gi, ' ')),
-  R.map(R.toLower),
-  R.map(R.split(' ')),
+const clean = R.pipe(
+  removeDiacritics,
+  R.replace(/'/gi, ' '),
+  R.toLower,
+  R.split(' ')
+);
+
+const modifiedData_ = R.pipe(
+  R.map(clean),
   R.flatten,
 );
 
 const nbMots_ = R.pipe(
-  modifieData_,
+  modifiedData_,
   R.length,
 );
 
 const nbMotsIdentiques_ = R.pipe(
-  modifieData_,
+  modifiedData_,
   R.countBy(R.toLower),
 );
 
 const nbLettresParMot_ = R.pipe(
-  modifieData_,
-  R.map(R.splitEvery(1)),
-  R.map(R.length),
+  modifiedData_,
+  R.map(R.pipe(R.splitEvery(1), R.length))
 );
 
 const similarity = (p1, p2) => levenshtein.get(p1, p2);
@@ -44,7 +47,7 @@ const calcDistance = R.curry((list, p) => R.map(x =>
 const mapDistance = list => R.map(calcDistance(list), list);
 
 const ressemblance_ = R.pipe(
-  modifieData_,
+  modifiedData_,
   mapDistance,
   R.tap(console.log),
 );

@@ -1,11 +1,11 @@
 const R = require('ramda');
 const levenshtein = require('fast-levenshtein');
 
-const {countRecurrences, getNomberOfWords} = require('./fonction-util');
+const {countRecurrences, getNumberOfWords} = require('./fonction-util');
 
 const path = 'fichiers-texte/textMotsSimilaires.txt';
 
-const correctOccurence_ = (value, key, obj) => {
+const correctOccurrences_ = (value, key, obj) => {
   R.keys(obj).forEach(elem => {
     const similitude = (1 - levenshtein.get(key, elem)) /
       Math.max(key.length, elem.length);
@@ -18,8 +18,9 @@ const correctOccurence_ = (value, key, obj) => {
 };
 
 const getIndicator_ = R.pipe(
-  R.forEachObjIndexed(correctOccurence_),
-  // TODO: Faire le calcul de l'indicateur (1 - nombre_de_mots / nombre_de_mots_totals
+  R.forEachObjIndexed(correctOccurrences_),
+  // TODO: Faire le calcul de l'indicateur
+  // (1 - nombre_de_mots / nombre_de_mots_totals)
 );
 
 const test_ = async path => {
