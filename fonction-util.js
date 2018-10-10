@@ -38,7 +38,6 @@ const countRecurrences = R.pipeP(
   R.countBy(R.toLower)
 );
 
-
 const similarity = (p1, p2) => levenshtein.get(p1, p2);
 const getLength = (p1, p2) => {
   const lp1 = R.length(p1);

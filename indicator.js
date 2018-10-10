@@ -1,7 +1,7 @@
 const R = require('ramda');
 const levenshtein = require('fast-levenshtein');
 
-const {countRecurrences, getNumberOfWords} = require('./fonction-util');
+const {countRecurrences} = require('./fonction-util');
 
 const path = 'fichiers-texte/textMotsSimilaires.txt';
 

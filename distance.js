@@ -1,19 +1,12 @@
-const levenshtein = require('fast-levenshtein');
-const {remove: removeDiacritics} = require('diacritics');
 const R = require('ramda');
 
-const {cleanPhrases, parseFile, getPercentage, similarity} = require('./fonction-util');
+const {cleanPhrases,
+  parseFile,
+  getPercentage,
+  similarity
+} = require('./fonction-util');
 
 const path = 'fichiers-texte/ptitTexte.txt';
-
-const listPhrases = [
-  'Je voudrais un ticket pour Lille',
-  'J\'aimerais un billet pour Toulouse',
-  'Un vol pour Amsterdam',
-  'Je voudrais connaître mes horaires de vol',
-  'À quelle heure est le prochain avion pour Paris',
-  'Combien d\'heure dure ce trajet'
-];
 
 const computePercentage = (p1, p2, list) => [
   R.indexOf(p1, list),
@@ -30,8 +23,8 @@ const sortByDistance = R.sortBy(R.prop(2));
 
 const test_ = R.pipe(
   R.map(cleanPhrases),
-   mapDistance,
-   R.map(sortByDistance),
+  mapDistance,
+  R.map(sortByDistance),
   R.tap(console.log)
 );
 
