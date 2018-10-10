@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const R = require('ramda');
 const {remove: removeDiacritics} = require('diacritics');
+const levenshtein = require('fast-levenshtein');
 
 const deleteIgnoredChar = R.pipe(
   R.replace(/'/g, ' '),
@@ -37,11 +38,18 @@ const countRecurrences = R.pipeP(
   R.countBy(R.toLower)
 );
 
+
+const similarity = (p1, p2) => levenshtein.get(p1, p2);
+const getLength = (p1, p2) => (p1.length >= p2.length) ? p1.length : p2.length;
+const getPercentage = (p1, p2) => Math.round((1 - (similarity(p1, p2) /
+  getLength(p1, p2))) * 1000) / 10;
+
 module.exports = {
   deleteIgnoredChar,
   parseFile,
   listAllWords,
   getNumberOfWords,
   countRecurrences,
-  cleanPhrases
+  cleanPhrases,
+  getPercentage,
 };
