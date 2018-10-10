@@ -2,19 +2,15 @@ const R = require('ramda');
 const removeDiacritics = require('diacritics').remove;
 const levenshtein = require('fast-levenshtein');
 
+const {cleanPhrases} = require('./fonction-util');
+
 const phrases = ['Je voudrais un ticket pour Lille',
   'J aimerais un billet pour Toulouse',
   'Un vol pour Amsterdam'];
 
-const clean = R.pipe(
-  removeDiacritics,
-  R.replace(/'/gi, ' '),
-  R.toLower,
-  R.split(' ')
-);
-
 const modifiedData_ = R.pipe(
-  R.map(clean),
+  R.map(cleanPhrases),
+  R.map(R.split(' ')),
   R.flatten,
 );
 
