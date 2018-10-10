@@ -2,10 +2,9 @@ const levenshtein = require('fast-levenshtein');
 const {remove: removeDiacritics} = require('diacritics');
 const R = require('ramda');
 
-const normalizeString_ = R.pipe(
-  removeDiacritics(R),
-  R.toLower()
-);
+const {cleanPhrases, parseFile} = require('./fonction-util');
+
+const path = 'fichiers-texte/ptitTexte.txt';
 
 const listPhrases = [
   'Je voudrais un ticket pour Lille',
@@ -38,10 +37,14 @@ const mapDistance = list => R.map(calcDistance(list), list);
 const sortByDistance = R.sortBy(R.prop(2));
 
 const test_ = R.pipe(
-  R.map(normalizeString_),
-  mapDistance,
-  R.map(sortByDistance),
+  R.map(cleanPhrases),
+   mapDistance,
+   R.map(sortByDistance),
   R.tap(console.log)
 );
 
-test_(listPhrases);
+const parse_ = async path => {
+  console.log(test_(await parseFile(path)));
+};
+
+parse_(path);

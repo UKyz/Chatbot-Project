@@ -17,12 +17,12 @@ const parseFile = R.pipeP(
 const cleanPhrases = R.pipe(
   removeDiacritics,
   deleteIgnoredChar,
-  R.split(' ')
 );
 
 const listAllWords = R.pipeP(
   parseFile,
   R.map(cleanPhrases),
+  R.map(R.split(' ')),
   R.flatten
 );
 
@@ -42,5 +42,6 @@ module.exports = {
   parseFile,
   listAllWords,
   getNumberOfWords,
-  countRecurrences
+  countRecurrences,
+  cleanPhrases
 };
