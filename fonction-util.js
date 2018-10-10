@@ -40,7 +40,11 @@ const countRecurrences = R.pipeP(
 
 
 const similarity = (p1, p2) => levenshtein.get(p1, p2);
-const getLength = (p1, p2) => (p1.length >= p2.length) ? p1.length : p2.length;
+const getLength = (p1, p2) => {
+  const lp1 = R.length(p1);
+  const lp2 = R.length(p2);
+  return R.gte(lp1, lp2) ? lp1 : lp2;
+};
 const getPercentage = (p1, p2) => Math.round((1 - (similarity(p1, p2) /
   getLength(p1, p2))) * 1000) / 10;
 
@@ -52,4 +56,5 @@ module.exports = {
   countRecurrences,
   cleanPhrases,
   getPercentage,
+  similarity
 };

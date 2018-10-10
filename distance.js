@@ -2,7 +2,7 @@ const levenshtein = require('fast-levenshtein');
 const {remove: removeDiacritics} = require('diacritics');
 const R = require('ramda');
 
-const {cleanPhrases, parseFile} = require('./fonction-util');
+const {cleanPhrases, parseFile, getPercentage, similarity} = require('./fonction-util');
 
 const path = 'fichiers-texte/ptitTexte.txt';
 
@@ -15,18 +15,10 @@ const listPhrases = [
   'Combien d\'heure dure ce trajet'
 ];
 
-const similarity = (p1, p2) => levenshtein.get(p1, p2);
-const getLength = (p1, p2) => {
-  const lp1 = R.length(p1);
-  const lp2 = R.length(p2);
-  return R.gte(lp1, lp2) ? lp1 : lp2;
-};
-const getPercentage = (sim, len) => Math.round((1 - (sim / len)) * 1000) / 10;
-
 const computePercentage = (p1, p2, list) => [
   R.indexOf(p1, list),
-  levenshtein.get(p1, p2),
-  getPercentage(similarity(p1, p2), getLength(p1, p2))
+  similarity(p1, p2),
+  getPercentage(p1, p2)
 ];
 
 const calcDistance = R.curry((list, p) => R.map(x =>
