@@ -16,19 +16,26 @@ const getFileContentAsString = R.pipeP(
   R.toString
 );
 
-const parseFile = R.pipeP(
+const parseTextFile = R.pipeP(
   getFileContentAsString,
   R.split('\n')
 );
 
 const papaparser = R.curry(x => papa.parse(x, {delimiter: ';', header: true}));
 
-const parseCSV = R.pipeP(
+const parseCsvFile = R.pipeP(
   getFileContentAsString,
   papaparser,
   R.prop('data'),
   R.map(R.prop('Log')),
 );
+
+const parseFile = async (path) => {
+  return (path.slice(path.lastIndexOf('.')) === '.txt' ?
+    parseTextFile(path) :
+    parseCsvFile(path));
+};
+
 const cleanPhrases = R.pipe(
   removeDiacritics,
   deleteIgnoredChar,
@@ -68,7 +75,6 @@ const getPercentage = (p1, p2) => Math.round((1 - (similarity(p1, p2) /
 module.exports = {
   deleteIgnoredChar,
   parseFile,
-  parseCSV,
   listAllWords,
   getNumberOfWords,
   countRecurrences,
