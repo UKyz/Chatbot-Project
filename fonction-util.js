@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const R = require('ramda');
 const {remove: removeDiacritics} = require('diacritics');
 const levenshtein = require('fast-levenshtein');
+const papa = require('papaparse');
 
 const deleteIgnoredChar = R.pipe(
   R.replace(/'/g, ' '),
@@ -9,12 +10,24 @@ const deleteIgnoredChar = R.pipe(
   R.toLower()
 );
 
-const parseFile = R.pipeP(
+const getFileContentAsString = R.pipeP(
   fs.readFile,
-  R.toString,
-  R.split('\n'),
+  R.toString
 );
 
+const parseFile = R.pipeP(
+  getFileContentAsString,
+  R.split('\n')
+);
+
+const papaparser = R.curry(x => papa.parse(x, {delimiter: ';', header: true}));
+
+const parseCSV = R.pipeP(
+  getFileContentAsString,
+  papaparser,
+  R.prop('data'),
+  R.map(R.prop('Log')),
+);
 const cleanPhrases = R.pipe(
   removeDiacritics,
   deleteIgnoredChar,
@@ -39,17 +52,20 @@ const countRecurrences = R.pipeP(
 );
 
 const similarity = (p1, p2) => levenshtein.get(p1, p2);
+
 const getLength = (p1, p2) => {
   const lp1 = R.length(p1);
   const lp2 = R.length(p2);
   return R.gte(lp1, lp2) ? lp1 : lp2;
 };
+
 const getPercentage = (p1, p2) => Math.round((1 - (similarity(p1, p2) /
   getLength(p1, p2))) * 1000) / 10;
 
 module.exports = {
   deleteIgnoredChar,
   parseFile,
+  parseCSV,
   listAllWords,
   getNumberOfWords,
   countRecurrences,
