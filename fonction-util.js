@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const R = require('ramda');
 const {remove: removeDiacritics} = require('diacritics');
 const levenshtein = require('fast-levenshtein');
+const distance = require('jaro-winkler');
 const papa = require('papaparse');
 
 const deleteIgnoredChar = R.pipe(
@@ -53,6 +54,8 @@ const countRecurrences = R.pipeP(
 
 const similarity = (p1, p2) => levenshtein.get(p1, p2);
 
+const similarity2 = (p1, p2) => Math.round(distance(p1, p2) * 1000) / 10;
+
 const getLength = (p1, p2) => {
   const lp1 = R.length(p1);
   const lp2 = R.length(p2);
@@ -71,5 +74,6 @@ module.exports = {
   countRecurrences,
   cleanPhrases,
   getPercentage,
-  similarity
+  similarity,
+  similarity2
 };

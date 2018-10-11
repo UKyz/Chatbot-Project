@@ -3,15 +3,15 @@ const R = require('ramda');
 const {cleanPhrases,
   parseFile,
   getPercentage,
-  similarity
+  similarity2
 } = require('./fonction-util');
 
-const path = 'fichiers-texte/ptitTexte.txt';
+const path = 'fichiers-texte/phrases_autre.txt';
 
 const computePercentage = (p1, p2, list) => [
   R.indexOf(p1, list),
-  similarity(p1, p2),
-  getPercentage(p1, p2)
+  getPercentage(p1, p2),
+  similarity2(p1, p2)
 ];
 
 const calcDistance = R.curry((list, p) => R.map(x =>
