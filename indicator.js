@@ -7,8 +7,8 @@ const path = 'fichiers-texte/textMotsSimilaires.txt';
 
 const correctOccurrences_ = (value, key, obj) => {
   R.keys(obj).forEach(elem => {
-    const similitude = (1 - levenshtein.get(key, elem)) /
-      Math.max(key.length, elem.length);
+    const similitude = 1 - (levenshtein.get(key, elem) /
+      Math.max(key.length, elem.length));
     if (key < elem && similitude > 0.8) {
       const sum = value + obj[elem];
       obj[elem] = sum;
@@ -17,14 +17,23 @@ const correctOccurrences_ = (value, key, obj) => {
   });
 };
 
-const getIndicator_ = R.pipe(
-  R.forEachObjIndexed(correctOccurrences_),
-  // TODO: Faire le calcul de l'indicateur
-  // (1 - nombre_de_mots / nombre_de_mots_totals)
+const computeWeight_ = R.curry((map) => {
+  const sum = R.reduce(R.add, 0, R.values(map));
+  R.forEachObjIndexed(correctOccurrences_, map);
+  R.keys(map).forEach(elem => {
+    map[elem] = 1 - (map[elem] / sum);
+  });
+  return map;
+});
+
+const getIndicator = R.pipeP(
+  countRecurrences,
+  computeWeight_,
+  R.tap(console.log),
 );
 
 const test_ = async path => {
-  console.log(getIndicator_(await countRecurrences(path)));
+  getIndicator(path);
 };
 
 test_(path);
