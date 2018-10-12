@@ -30,7 +30,7 @@ const parseCsvFile = R.pipeP(
   R.map(R.prop('Log')),
 );
 
-const parseFile = async (path) => {
+const parseFile = path => {
   return (path.slice(path.lastIndexOf('.')) === '.txt' ?
     parseTextFile(path) :
     parseCsvFile(path));
