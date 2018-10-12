@@ -3,7 +3,7 @@ const levenshtein = require('fast-levenshtein');
 
 const {countRecurrences} = require('./fonction-util');
 
-const path = 'fichiers-texte/textMotsSimilaires.txt';
+const path = 'fichiers-texte/phrase_aleatoire.txt';
 
 const correctOccurrences_ = (value, key, obj) => {
   R.keys(obj).forEach(elem => {
@@ -17,14 +17,14 @@ const correctOccurrences_ = (value, key, obj) => {
   });
 };
 
-const computeWeight_ = R.curry((map) => {
-  const sum = R.reduce(R.add, 0, R.values(map));
+const computeWeight_ = map => {
+  const max = Math.max(...R.values(map));
   R.forEachObjIndexed(correctOccurrences_, map);
   R.keys(map).forEach(elem => {
-    map[elem] = 1 - (map[elem] / sum);
+    map[elem] = map[elem] / max;
   });
   return map;
-});
+};
 
 const getIndicator = R.pipeP(
   countRecurrences,
