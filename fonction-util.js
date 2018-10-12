@@ -7,6 +7,7 @@ const papa = require('papaparse');
 
 const deleteIgnoredChar = R.pipe(
   R.replace(/'/g, ' '),
+  R.replace(/-/g, ' '),
   R.replace(/[^A-Za-z0-9 ]/g, ''),
   R.toLower()
 );
