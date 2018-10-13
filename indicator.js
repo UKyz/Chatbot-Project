@@ -21,7 +21,7 @@ const computeWeight_ = map => {
   const max = Math.max(...R.values(map));
   R.forEachObjIndexed(correctOccurrences_, map);
   R.keys(map).forEach(elem => {
-    map[elem] = map[elem] / max;
+    map[elem] /= max;
   });
   return map;
 };
@@ -33,7 +33,7 @@ const getIndicator = R.pipeP(
 );
 
 const test_ = async path => {
-  getIndicator(path);
+  console.log(await getIndicator(path));
 };
 
 test_(path);
