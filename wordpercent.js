@@ -1,6 +1,6 @@
 const R = require('ramda');
 
-const {cleanPhrases, getPercentage} = require('./fonction-util');
+const {cleanPhrases, getPercentage} = require('./lib/fonction-util');
 
 const phrases = ['Je voudrais un ticket pour Lille',
   'J aimerais un billet pour Toulouse',

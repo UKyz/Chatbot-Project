@@ -4,7 +4,7 @@ const {cleanPhrases,
   parseFile,
   getPercentage,
   similarity2
-} = require('./fonction-util');
+} = require('./lib/fonction-util');
 
 const path = 'fichiers-texte/phrases_autre.txt';
 
