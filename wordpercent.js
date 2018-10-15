@@ -42,7 +42,9 @@ const ressemblance_ = R.pipe(
   R.tap(console.log),
 );
 
-console.log(nbMots_(phrases));
+/*console.log(nbMots_(phrases));
 console.log(nbMotsIdentiques_(phrases));
 console.log(nbLettresParMot_(phrases));
-ressemblance_(phrases);
+ressemblance_(phrases);*/
+
+module.exports = {nbMotsIdentiques_};
