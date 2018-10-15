@@ -25,5 +25,5 @@ const wordWeight_ = R.pipe(
   mapP,
 );
 
-// console.log(sentences);
+console.log(sentences);
 console.log(wordWeight_(sentences));
