@@ -40,7 +40,7 @@ const fi = (p1, p2) => R.over(testons(p1, p2), p1);
 const cal = R.curry((list, p) => R.map(x => fi(x, p), list));
 const mapD = list => R.map(cal(list), list); */
 
-const test_ = (path, brink) => R.pipeP(
+const clusterWordsBySimilarity_ = (path, brink) => R.pipeP(
   parseFile,
   R.map(cleanPhrases),
   R.map(R.split(' ')),
@@ -56,4 +56,4 @@ const test_ = (path, brink) => R.pipeP(
   R.tap(console.log)
 )(path);
 
-test_('fichiers-texte/phrase_aleatoire.txt', 85);
+clusterWordsBySimilarity_('fichiers-texte/phrase_aleatoire.txt', 85);
