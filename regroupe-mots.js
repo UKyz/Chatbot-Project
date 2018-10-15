@@ -2,10 +2,8 @@ const R = require('ramda');
 
 const {parseFile, cleanPhrases, getPercentage} = require('./lib/fonction-util');
 
-const path = 'fichiers-texte/phrase_aleatoire.txt';
-
-const brinkPer = 85;
-const filtrer = list => (list[4] >= brinkPer && list[4] < 100);
+const filterMethod = R.curry((list, brink) =>
+  (list[4] >= brink && list[4] < 100));
 
 const computeWeight = (p, listLength) => [
   p[0],
@@ -42,7 +40,8 @@ const fi = (p1, p2) => R.over(testons(p1, p2), p1);
 const cal = R.curry((list, p) => R.map(x => fi(x, p), list));
 const mapD = list => R.map(cal(list), list); */
 
-const getIndicator_ = R.pipe(
+const test_ = (path, brink) => R.pipeP(
+  parseFile,
   R.map(cleanPhrases),
   R.map(R.split(' ')),
   R.flatten,
@@ -51,14 +50,10 @@ const getIndicator_ = R.pipe(
   mapP,
   mapC,
   R.unnest,
-  R.filter(filtrer),
+  R.filter(filterMethod(R.__, brink)),
   delDouble,
   R.sort(R.descend(R.prop(4))),
   R.tap(console.log)
-);
+)(path);
 
-const test_ = async path => {
-  getIndicator_(await parseFile(path));
-};
-
-test_(path);
+test_('fichiers-texte/phrase_aleatoire.txt', 85);
