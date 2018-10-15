@@ -2,9 +2,9 @@ const R = require('ramda');
 
 const {nbMotsIdentiques_} = require('./wordpercent');
 
-const sentences = ['Je voudrais un ticket pour Lille',
-  'J aimerais un billet pour Toulouse',
-  'Un vol pour Amsterdam'];
+const sentences = ['Je voudrais un truc ticket truc pour Lille',
+  'J aimerais un truc billet pour truc Toulouse',
+  'Un vol truc pour Amsterdam'];
 
 const maxWeight_ = R.pipe(
   R.reduce(R.maxBy(R.prop(1)), ['', -Infinity]),
@@ -25,5 +25,21 @@ const wordWeight_ = R.pipe(
   mapP,
 );
 
-console.log(sentences);
-console.log(wordWeight_(sentences));
+const nbDifferentWords_ = R.pipe(
+  nbMotsIdentiques_,
+  R.toPairs,
+  R.length
+);
+
+const groupByWordWeight_ = (weight, list) => {
+  const tab = wordWeight_(list);
+
+  tab.forEach(elm => {
+    if (elm[2] > weight) {
+      console.log(`${elm[0]} : ${elm[2]}`);
+    }
+  });
+};
+
+// console.log(wordWeight_(sentences));
+groupByWordWeight_(0.5, sentences);
