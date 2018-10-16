@@ -25,21 +25,23 @@ const wordWeight_ = R.pipe(
   mapP,
 );
 
-const nbDifferentWords_ = R.pipe(
-  nbMotsIdentiques_,
-  R.toPairs,
-  R.length
-);
-
 const groupByWordWeight_ = (weight, list) => {
   const tab = wordWeight_(list);
+  const group = [];
 
   tab.forEach(elm => {
     if (elm[2] > weight) {
-      console.log(`${elm[0]} : ${elm[2]}`);
+      group.push(elm[0], elm[2]);
     }
   });
+  return group;
 };
 
-// console.log(wordWeight_(sentences));
-groupByWordWeight_(0.5, sentences);
+const clusterWeight_ = R.pipe(
+  R.tap(console.log),
+  R.splitEvery(2),
+  R.tap(console.log),
+);
+
+wordWeight_(sentences);
+clusterWeight_(groupByWordWeight_(0.5, sentences));
