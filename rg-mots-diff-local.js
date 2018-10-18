@@ -23,7 +23,9 @@ const calcDistance = R.curry((list, p) => R.map(x =>
   compare(x, p), list));
 const mapC = list => R.map(calcDistance(list), list);
 
-const testAlmostSame = (w1, w2) => {
+const testAlmostSame = (elm) => {
+  const w1 = elm[0];
+  const w2 = elm[2];
   /*console.log(`${w1} ${w2}`);
   if (similarity(w1, w2) === 0) {
     console.log('1');
@@ -57,13 +59,7 @@ const testAlmostSame = (w1, w2) => {
 };
 
 const delDiffNotEnd = list => {
-  list.forEach(elm => {
-    if (!testAlmostSame(elm[0], elm[2])) {
-      //console.log(`bye bye : ${elm}`);
-      list.splice(list.indexOf(elm), 1);
-    }
-  });
-  return list;
+  return R.filter(testAlmostSame, list);
 };
 
 const delDouble = list => {
@@ -90,7 +86,6 @@ const clusterWordsBySimilarity_ = (path, brink) => R.pipeP(
   R.filter(filterMethod(R.__, brink)),
   delDouble,
   R.sort(R.descend(R.prop(4))),
-  R.tap(console.log),
   delDiffNotEnd,
   R.tap(console.log)
 )(path);
