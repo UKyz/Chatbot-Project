@@ -39,10 +39,11 @@ const mapDistance = list => R.map(calcDistance(list), list);
 const ressemblance_ = R.pipe(
   modifiedData_,
   mapDistance,
-  R.tap(console.log),
 );
 
-console.log(nbMots_(phrases));
-console.log(nbMotsIdentiques_(phrases));
-console.log(nbLettresParMot_(phrases));
+nbMots_(phrases);
+nbMotsIdentiques_(phrases);
+nbLettresParMot_(phrases);
 ressemblance_(phrases);
+
+module.exports = {nbMotsIdentiques_};
