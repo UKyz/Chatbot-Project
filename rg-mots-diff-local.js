@@ -24,42 +24,17 @@ const calcDistance = R.curry((list, p) => R.map(x =>
 const mapC = list => R.map(calcDistance(list), list);
 
 const testAlmostSame = (elm) => {
-  const w1 = elm[0];
-  const w2 = elm[2];
-  /*console.log(`${w1} ${w2}`);
-  if (similarity(w1, w2) === 0) {
-    console.log('1');
-  } else if (similarity(w1.substring(0, w1.length - 1),
-    w2.substring(0, w2.length - 1)) === 0) {
-    console.log('2');
-  } else if (similarity(w1.substring(0, w1.length - 1), w2) === 0) {
-    console.log('3');
-  } else if (similarity(w2.substring(0, w2.length - 1), w1) === 0) {
-    console.log('4');
-  } else if (similarity(w1.substring(0, w1.length - 2),
-    w2.substring(0, w2.length - 2)) === 0) {
-    console.log('5');
-  } else if (similarity(w1.substring(0, w1.length - 2), w2) === 0) {
-    console.log('6');
-  } else if (similarity(w2.substring(0, w2.length - 2), w1) === 0) {
-    console.log('7');
-  }*/
-
   return (
-    (similarity(w1, w2) === 0) ||
-    (similarity(w1.substring(0, w1.length - 1),
-      w2.substring(0, w2.length - 1)) === 0) ||
-    (similarity(w1.substring(0, w1.length - 1), w2) === 0) ||
-    (similarity(w2.substring(0, w2.length - 1), w1) === 0) ||
-    (similarity(w1.substring(0, w1.length - 2),
-      w2.substring(0, w2.length - 2)) === 0) ||
-    (similarity(w1.substring(0, w1.length - 2), w2) === 0) ||
-    (similarity(w2.substring(0, w2.length - 2), w1) === 0)
+    (similarity(elm[0], elm[2]) === 0) ||
+    (similarity(elm[0].substring(0, elm[0].length - 1),
+      elm[2].substring(0, elm[2].length - 1)) === 0) ||
+    (similarity(elm[0].substring(0, elm[0].length - 1), elm[2]) === 0) ||
+    (similarity(elm[2].substring(0, elm[2].length - 1), elm[0]) === 0) ||
+    (similarity(elm[0].substring(0, elm[0].length - 2),
+      elm[2].substring(0, elm[2].length - 2)) === 0) ||
+    (similarity(elm[0].substring(0, elm[0].length - 2), elm[2]) === 0) ||
+    (similarity(elm[2].substring(0, elm[2].length - 2), elm[0]) === 0)
   );
-};
-
-const delDiffNotEnd = list => {
-  return R.filter(testAlmostSame, list);
 };
 
 const delDouble = list => {
@@ -86,7 +61,7 @@ const clusterWordsBySimilarity_ = (path, brink) => R.pipeP(
   R.filter(filterMethod(R.__, brink)),
   delDouble,
   R.sort(R.descend(R.prop(4))),
-  delDiffNotEnd,
+  R.filter(testAlmostSame),
   R.tap(console.log)
 )(path);
 
