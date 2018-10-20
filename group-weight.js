@@ -38,10 +38,10 @@ const groupByWordWeight_ = (weight, list) => {
 };
 
 const clusterWeight_ = R.pipe(
-  R.tap(console.log),
   R.splitEvery(2),
-  R.tap(console.log),
 );
 
 wordWeight_(sentences);
 clusterWeight_(groupByWordWeight_(0.5, sentences));
+
+module.exports = {wordWeight_};

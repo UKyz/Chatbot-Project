@@ -2,9 +2,9 @@ const R = require('ramda');
 
 const {cleanPhrases, getPercentage} = require('./lib/fonction-util');
 
-const phrases = ['Je voudrais un ticket pour Lille',
-  'J aimerais un billet pour Toulouse',
-  'Un vol pour Amsterdam'];
+const phrases = ['Je voudrais un truc ticket truc pour Lille',
+  'J aimerais un truc billet pour truc Toulouse',
+  'Un vol truc pour Amsterdam'];
 
 const modifiedData_ = R.pipe(
   R.map(cleanPhrases),
@@ -46,4 +46,4 @@ nbMotsIdentiques_(phrases);
 nbLettresParMot_(phrases);
 ressemblance_(phrases);
 
-module.exports = {nbMotsIdentiques_};
+module.exports = {nbMotsIdentiques_, modifiedData_, phrases};
