@@ -20,8 +20,11 @@ const process = async () => {
   const sentences = await parseFile(pathFileIn);
   let indicator = await getIndicator(pathFileIn);
   const bestIndicator = getBestWords_(indicator);
-  const res = countImportantWordsInSentences_(sentences);
-  //console.log(countImportantWords_(sentences[8], bestIndicator));
+  const data = countImportantWordsInSentences_(sentences, bestIndicator);
+  let res = new ResultSave(pathFileOut, 'ReuMotsImportant',
+    ['sentence', 'count']);
+  res.data = data;
+  res.saveAsCsv();
 };
 
 const getSentencesAsObjectArray_ = R.pipe(
@@ -36,6 +39,15 @@ const countImportantWords_ = (sentence, bestIndicator) => R.pipe(
   R.filter(R.contains(R.__, R.keys(bestIndicator))),
   R.length
 )(sentence);
+
+const countImportantWordsInSentences_ = (sentences, bestIndicator) => R.pipe(
+  getSentencesAsObjectArray_,
+  R.map(addCount_(R.__, bestIndicator)),
+  R.tap(console.log),
+)(sentences);
+
+const addCount_ = R.curry((map, bestInd) => R.assoc('count',
+  countImportantWords_(map['sentence'], bestInd), map));
 
 const getTenPercent_ = list => R.pipe(
   R.length,
