@@ -52,9 +52,8 @@ const clusterSentences = (wordList, sentenceList) => {
       if (sentence1 !== sentence2) {
         listReturn.push([sentence1, sentence2, turnToPercent(
           testSentences(wordList, sentence1.split(' '), sentence2.split(' ')),
-          ((sentence2.split(' ').length >= sentence1.split(' ').length) ? sentence2.split(' ').length :
-            sentence1.split(' ').length))
-        ]);
+          ((sentence2.split(' ').length >= sentence1.split(' ').length) ?
+            sentence2.split(' ').length : sentence1.split(' ').length))]);
       }
     });
   });
@@ -91,11 +90,11 @@ const main = async (path, brink) => {
   const listSplit = await
   cleanSentences_(path);
 
-  let sentencesClustered =
+  const sentencesClustered =
     clusterSentences(sameWords, listSplit).sort((a, b) => {
       return b[2] - a[2];
     }).filter(list => {
-      return list[2] >= 0
+      return list[2] >= 0;
     });
 
   console.log(sentencesClustered);
