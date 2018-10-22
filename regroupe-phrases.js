@@ -9,7 +9,7 @@ const {
   similarity
 } = require('./lib/fonction-util');
 
-const testAlmostSame = (elm) => {
+const testAlmostSame = elm => {
   return (
     (similarity(elm[0], elm[1]) === 0) ||
     (similarity(elm[0].substring(0, elm[0].length - 1),
@@ -46,7 +46,7 @@ const cleanSentences_ = (path, brink) => R.pipeP(
 )(path);
 
 const clusterSentences = (wordList, sentenceList) => {
-  let listReturn = [];
+  const listReturn = [];
   sentenceList.forEach(sentence1 => {
     sentenceList.forEach(sentence2 => {
       if (sentence1 !== sentence2) {
@@ -64,11 +64,10 @@ const testSentences = (wordList, words1, words2) => {
     words2.forEach(word2 => {
       if (word1 === word2 && word1.length >= 4) {
         nbPoints++;
-      }
-      else {
+      } else {
         wordList.forEach(double => {
           if ((word1 === double[0] && word2 === double[1]) ||
-            word1 === double[1] && word2 === double[0]) {
+            (word1 === double[1] && word2 === double[0])) {
             nbPoints++;
           }
         });
@@ -80,17 +79,17 @@ const testSentences = (wordList, words1, words2) => {
 
 const main = async () => {
   const sameWords = await
-    clusterWordsBySimilarity_('fichiers-texte/phrase_aleatoire.txt', 85);
+  clusterWordsBySimilarity_('fichiers-texte/phrase_aleatoire.txt', 85);
 
-  //console.log(sameWords);
+  // Console.log(sameWords);
 
   const listSplit = await
-    cleanSentences_('fichiers-texte/phrase_aleatoire.txt', 85);
+  cleanSentences_('fichiers-texte/phrase_aleatoire.txt', 85);
 
   let sentencesClustered =
     clusterSentences(sameWords, listSplit).sort((a, b) => {
-    return b[2] - a[2];
-  });
+      return b[2] - a[2];
+    });
 
   sentencesClustered = sentencesClustered.filter(list => list[2] > 0);
 

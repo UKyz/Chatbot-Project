@@ -1,9 +1,14 @@
 const R = require('ramda');
-const {getPercentage, parseFile, cleanPhrases, similarity} = require('./lib/fonction-util');
+const {
+  getPercentage,
+  parseFile,
+  cleanPhrases,
+  similarity
+} = require('./lib/fonction-util');
 
 const filterMethod = R.curry((list, brink) =>
-  (list[4] >= brink && ((list[4] <= 100 && list[0].length >= 4)
-    || list[4] < 100)));
+  (list[4] >= brink && ((list[4] <= 100 && list[0].length >= 4) ||
+    list[4] < 100)));
 
 const computeWeight = (p, listLength) => [
   p[0],
@@ -24,7 +29,7 @@ const calcDistance = R.curry((list, p) => R.map(x =>
   compare(x, p), list));
 const mapC = list => R.map(calcDistance(list), list);
 
-const testAlmostSame = (elm) => {
+const testAlmostSame = elm => {
   return (
     (similarity(elm[0], elm[2]) === 0) ||
     (similarity(elm[0].substring(0, elm[0].length - 1),
