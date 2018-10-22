@@ -48,12 +48,13 @@ const cleanSentences_ = R.pipeP(
 const clusterSentences = (wordList, sentenceList) => {
   const listReturn = [];
   sentenceList.forEach(sentence1 => {
+    const cutS1 = sentence1.split(' ').length;
     sentenceList.forEach(sentence2 => {
+      const cutS2 = sentence2.split(' ').length;
       if (sentence1 !== sentence2) {
         listReturn.push([sentence1, sentence2, turnToPercent(
-          testSentences(wordList, sentence1.split(' '), sentence2.split(' ')),
-          ((sentence2.split(' ').length >= sentence1.split(' ').length) ?
-            sentence2.split(' ').length : sentence1.split(' ').length))]);
+          testSentences(wordList, cutS1, cutS2),
+          ((cutS1.length >= cutS2.length) ? cutS1.length : cutS2.length))]);
       }
     });
   });
