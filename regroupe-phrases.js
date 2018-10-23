@@ -8,6 +8,7 @@ const {
   delDouble,
   similarity
 } = require('./lib/fonction-util');
+const save = require('./lib/result-save');
 
 const testAlmostSame = elm => {
   return (
@@ -52,9 +53,9 @@ const clusterSentences = (wordList, sentenceList) => {
     sentenceList.forEach(sentence2 => {
       const cutS2 = sentence2.split(' ');
       if (sentence1 !== sentence2) {
-        listReturn.push([sentence1, sentence2, turnToPercent(
-          testSentences(wordList, cutS1, cutS2),
-          ((cutS1.length >= cutS2.length) ? cutS1.length : cutS2.length))]);
+        listReturn.push({'sentence1': sentence1, 'sentence2' :sentence2,
+            'score' : turnToPercent(testSentences(wordList, cutS1, cutS2),
+          ((cutS1.length >= cutS2.length) ? cutS1.length : cutS2.length))});
       }
     });
   });
@@ -98,7 +99,12 @@ const main = async (path, brink) => {
       return list.score >= 0;
     });
 
-  console.log(sentencesClustered);
+  //console.log(sentencesClustered);
+
+  const endTest = new save('/Users/Victor/Documents/ESME Sudria/B5/test/', 'Test',
+    ['Phrase1', 'Phrase2', '% ressemblance']);
+  endTest.data = sentencesClustered;
+  endTest.saveAsCsv();
 };
 
 main('fichiers-texte/phrase_aleatoire.txt', 85);
