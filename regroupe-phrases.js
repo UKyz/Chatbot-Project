@@ -101,8 +101,8 @@ const main = async (path, brink) => {
 
   //console.log(sentencesClustered);
 
-  const endTest = new save('/Users/Victor/Documents/ESME Sudria/B5/test/', 'Test',
-    ['Phrase1', 'Phrase2', '% ressemblance']);
+  const endTest = new save('/Users/Victor/Documents/ESME Sudria/B5/test/',
+    'Test', ['Phrase1', 'Phrase2', '% ressemblance']);
   endTest.data = sentencesClustered;
   endTest.saveAsCsv();
 };
