@@ -48,9 +48,9 @@ const cleanSentences_ = R.pipeP(
 const clusterSentences = (wordList, sentenceList) => {
   const listReturn = [];
   sentenceList.forEach(sentence1 => {
-    const cutS1 = sentence1.split(' ').length;
+    const cutS1 = sentence1.split(' ');
     sentenceList.forEach(sentence2 => {
-      const cutS2 = sentence2.split(' ').length;
+      const cutS2 = sentence2.split(' ');
       if (sentence1 !== sentence2) {
         listReturn.push([sentence1, sentence2, turnToPercent(
           testSentences(wordList, cutS1, cutS2),
@@ -93,9 +93,9 @@ const main = async (path, brink) => {
 
   const sentencesClustered =
     clusterSentences(sameWords, listSplit).sort((a, b) => {
-      return b[2] - a[2];
+      return b.score - a.score;
     }).filter(list => {
-      return list[2] >= 0;
+      return list.score >= 0;
     });
 
   console.log(sentencesClustered);
