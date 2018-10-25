@@ -4,8 +4,8 @@ const {getIndicator} = require('../lib/indicator');
 const {parseFile} = require('../lib/fonction-util');
 const ResultSave = require('../lib/result-save');
 
-const pathFileIn = '../fichiers-texte/phrases_autre.txt';
-const pathFileOut = '../results/';
+const pathFileIn = '../csv-files/air-france-inspiration-2018-09-28-logs.csv';
+const pathFileOut = '../res/';
 
 /**
  * Formate a numeric value to a percentage
@@ -18,12 +18,13 @@ const percentage_ = value => `${(value * 100).toFixed(
 
 const process = async () => {
   const sentences = await parseFile(pathFileIn);
-  let indicator = await getIndicator(pathFileIn);
+  const indicator = await getIndicator(pathFileIn);
   const bestIndicator = getBestWords_(indicator);
   const data = countImportantWordsInSentences_(sentences, bestIndicator);
-  let res = new ResultSave(pathFileOut, 'ReuMotsImportant',
-    ['sentence', 'count']);
+  const res = new ResultSave(pathFileOut, 'ReuMotsImportant',
+    ['sentence', 'numberImportantWordsPerTotalWords']);
   res.data = data;
+  res.sortBy('');
   res.saveAsCsv();
 };
 
@@ -43,11 +44,12 @@ const countImportantWords_ = (sentence, bestIndicator) => R.pipe(
 const countImportantWordsInSentences_ = (sentences, bestIndicator) => R.pipe(
   getSentencesAsObjectArray_,
   R.map(addCount_(R.__, bestIndicator)),
-  R.tap(console.log),
 )(sentences);
 
-const addCount_ = R.curry((map, bestInd) => R.assoc('count',
-  countImportantWords_(map['sentence'], bestInd), map));
+const addCount_ = R.curry(
+  (map, bestInd) => R.assoc('numberImportantWordsPerTotalWords',
+    percentage_(countImportantWords_(map.sentence, bestInd) /
+      R.split(' ', map.sentence).length), map));
 
 const getTenPercent_ = list => R.pipe(
   R.length,
