@@ -7,21 +7,12 @@ const ResultSave = require('../lib/result-save');
 const pathFileIn = '../fichiers-texte/phrases_autre.txt';
 const pathFileOut = '../results/';
 
-/**
- * Formate a numeric value to a percentage
- * @param {number} value the numeric value
- * @returns {string} formated value
- * @private
- */
-const percentage_ = value => `${(value * 100).toFixed(
-  2)}%`;
-
 const process = async () => {
   const sentences = await parseFile(pathFileIn);
-  let indicator = await getIndicator(pathFileIn);
+  const indicator = await getIndicator(pathFileIn);
   const bestIndicator = getBestWords_(indicator);
   const data = countImportantWordsInSentences_(sentences, bestIndicator);
-  let res = new ResultSave(pathFileOut, 'ReuMotsImportant',
+  const res = new ResultSave(pathFileOut, 'ReuMotsImportant',
     ['sentence', 'count']);
   res.data = data;
   res.saveAsCsv();
@@ -47,7 +38,7 @@ const countImportantWordsInSentences_ = (sentences, bestIndicator) => R.pipe(
 )(sentences);
 
 const addCount_ = R.curry((map, bestInd) => R.assoc('count',
-  countImportantWords_(map['sentence'], bestInd), map));
+  countImportantWords_(map.sentence, bestInd), map));
 
 const getTenPercent_ = list => R.pipe(
   R.length,
