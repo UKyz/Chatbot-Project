@@ -7,15 +7,6 @@ const ResultSave = require('../lib/result-save');
 const pathFileIn = '../csv-files/air-france-inspiration-2018-09-28-logs.csv';
 const pathFileOut = '../res/';
 
-/**
- * Formate a numeric value to a percentage
- * @param {number} value the numeric value
- * @returns {string} formated value
- * @private
- */
-const percentage_ = value => `${(value * 100).toFixed(
-  2)}%`;
-
 const process = async () => {
   const sentences = await parseFile(pathFileIn);
   const indicator = await getIndicator(pathFileIn);
