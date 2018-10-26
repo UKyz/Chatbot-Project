@@ -1,9 +1,14 @@
 const R = require('ramda');
-const {getPercentage, parseFile, cleanPhrases, similarity} =
-  require('./lib/fonction-util');
+const {
+  getPercentage,
+  parseFile,
+  cleanPhrases,
+  similarity
+} = require('./lib/fonction-util');
 
 const filterMethod = R.curry((list, brink) =>
-  (list[4] >= brink && list[4] < 100));
+  (list[4] >= brink && ((list[4] <= 100 && list[0].length >= 4) ||
+    list[4] < 100)));
 
 const computeWeight = (p, listLength) => [
   p[0],
