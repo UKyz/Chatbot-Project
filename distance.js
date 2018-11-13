@@ -6,7 +6,7 @@ const {cleanPhrases,
   similarity2
 } = require('./lib/fonction-util');
 
-const path = 'fichiers-texte/phrases_autre.txt';
+const path = 'input/fichiers-texte/phrases_autre.txt';
 
 const computePercentage = (p1, p2, list) => [
   R.indexOf(p1, list),
