@@ -5,7 +5,7 @@ const {getIndicator} = require('../lib/indicator');
 const {parseFile, listAllWordsInSentences} = require('../lib/fonction-util');
 const {plotDataClustered: plot} = require('../lib/plot');
 
-const pathFileIn = '../fichiers-texte/phrase_aleatoire.txt';
+const pathFileIn = '../input/fichiers-texte/phrase_aleatoire.txt';
 
 const getIndicatorSentence = (sentence, indicator) => R.pipe(
   listAllWordsInSentences,

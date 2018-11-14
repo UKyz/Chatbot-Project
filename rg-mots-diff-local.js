@@ -71,4 +71,4 @@ const clusterWordsBySimilarity_ = (path, brink) => R.pipeP(
   R.tap(console.log)
 )(path);
 
-clusterWordsBySimilarity_('fichiers-texte/phrase_aleatoire.txt', 85);
+clusterWordsBySimilarity_('input/fichiers-texte/phrase_aleatoire.txt', 85);

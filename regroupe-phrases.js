@@ -107,4 +107,4 @@ const main = async (path, brink) => {
   endTest.saveAsCsv();
 };
 
-main('fichiers-texte/phrase_aleatoire.txt', 85);
+main('input/fichiers-texte/phrase_aleatoire.txt', 85);

@@ -5,4 +5,4 @@ const fi = (p1, p2) => R.over(testons(p1, p2), p1);
 const cal = R.curry((list, p) => R.map(x => fi(x, p), list));
 const mapD = list => R.map(cal(list), list); */
 
-clusterWordsBySimilarity_('fichiers-texte/phrase_aleatoire.txt', 85);
+clusterWordsBySimilarity_('input/fichiers-texte/phrase_aleatoire.txt', 85);
