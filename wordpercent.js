@@ -1,6 +1,6 @@
 const R = require('ramda');
 
-const {cleanPhrases, getPercentage} = require('./lib/fonction-util');
+const {cleanPhrases, getPercentage, parseFile} = require('./lib/fonction-util');
 
 const phrases = ['Je voudrais un truc ticket truc pour Lille',
   'J aimerais un truc billet pour truc Toulouse',
@@ -41,9 +41,13 @@ const ressemblance_ = R.pipe(
   mapDistance,
 );
 
-nbMots_(phrases);
-nbMotsIdentiques_(phrases);
-nbLettresParMot_(phrases);
-ressemblance_(phrases);
+const parse_ = async path => {
+  ressemblance_(await parseFile(path))
+};
+
+//nbMots_(phrases);
+//nbMotsIdentiques_(phrases);
+//nbLettresParMot_(phrases);
+parse_('air-france-inspiration-2018-09-28-logs.csv');
 
 module.exports = {nbMotsIdentiques_, modifiedData_, phrases};
