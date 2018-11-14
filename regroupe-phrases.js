@@ -101,10 +101,14 @@ const main = async (path, brink) => {
       return list.score >= 0;
     });
 
+  return sentencesClustered;
+};
+
+const saveAsCSV = res => {
   const endTest = new Save('/Users/Victor/Documents/ESME Sudria/B5/test/',
     'Test', ['Phrase1', 'Phrase2', '% ressemblance']);
-  endTest.data = sentencesClustered;
+  endTest.data = res;
   endTest.saveAsCsv();
 };
 
-main('input/fichiers-texte/phrase_aleatoire.txt', 85);
+saveAsCSV(main('input/fichiers-texte/phrase_aleatoire.txt', 85));
