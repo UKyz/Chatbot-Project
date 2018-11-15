@@ -2,6 +2,7 @@ const R = require('ramda');
 
 const {phrases} = require('./wordpercent');
 const {wordWeight_} = require('./group-weight');
+const {parseFile} = require('./lib/fonction-util');
 
 const mean_ = R.memoizeWith(R.identity, R.pipe(
   wordWeight_,
@@ -21,4 +22,8 @@ const deviation_ = R.memoizeWith(R.identity, x => {
 
 const normality68 = x => [mean_(x) - deviation_(x), mean_(x) + deviation_(x)];
 
-console.log(normality68(phrases));
+const parse_ = async path => {
+  console.log(normality68(await parseFile(path)));
+};
+
+parse_('air-france-inspiration-2018-09-28-logs.csv');
