@@ -50,4 +50,4 @@ const parse_ = async path => {
 //nbLettresParMot_(phrases);
 parse_('air-france-inspiration-2018-09-28-logs.csv');
 
-module.exports = {nbMotsIdentiques_, modifiedData_, phrases};
+module.exports = {nbMotsIdentiques_, modifiedData_, phrases, nbMots_};
