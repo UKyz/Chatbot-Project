@@ -46,4 +46,4 @@ nbMotsIdentiques_(phrases);
 nbLettresParMot_(phrases);
 ressemblance_(phrases);
 
-module.exports = {nbMotsIdentiques_, modifiedData_, phrases};
+module.exports = {nbMotsIdentiques_, modifiedData_, phrases, nbMots_};
