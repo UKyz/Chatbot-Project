@@ -1,6 +1,5 @@
 const R = require('ramda');
 
-const {phrases} = require('./wordpercent');
 const {wordWeight_} = require('./group-weight');
 const {parseFile} = require('./lib/fonction-util');
 

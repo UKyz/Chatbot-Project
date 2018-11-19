@@ -22,10 +22,10 @@ const nbMotsIdentiques_ = R.pipe(
   R.countBy(R.toLower),
 );
 
-const nbLettresParMot_ = R.pipe(
+/* -- const nbLettresParMot_ = R.pipe(
   modifiedData_,
   R.map(R.pipe(R.splitEvery(1), R.length))
-);
+); */
 
 const calcPourcentage = (p1, p2, list) => [
   R.indexOf(p1, list),
@@ -42,12 +42,12 @@ const ressemblance_ = R.pipe(
 );
 
 const parse_ = async path => {
-  ressemblance_(await parseFile(path))
+  ressemblance_(await parseFile(path));
 };
 
-//nbMots_(phrases);
-//nbMotsIdentiques_(phrases);
-//nbLettresParMot_(phrases);
+// NbMots_(phrases);
+// nbMotsIdentiques_(phrases);
+// nbLettresParMot_(phrases);
 parse_('air-france-inspiration-2018-09-28-logs.csv');
 
 module.exports = {nbMotsIdentiques_, modifiedData_, phrases, nbMots_};
