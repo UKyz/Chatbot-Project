@@ -1,22 +1,26 @@
 const R = require('ramda');
 
-const phrases = ['Je voudrais un ticket pour Lille',
-  'J aimerais un billet pour Toulouse',
-  'Un vol pour Amsterdam',
-  'Un train vers Paris',
-  'Voyager pendant deux semaines',
-  'Un grand sejour au soleil',
-  'De belles vacances tres loin pour se detendre',
-  'La Bretagne c est trop genial',
-  'Aujourdhui il fait vraiment tres beau'];
+const {
+  parseTextFile
+} = require('./lib/fonction-util');
 
-const nbMotsDansPhrase_ = R.pipe(
-  R.split(' '),
-  R.flatten,
-  R.length,
-);
+const {
+  main
+} = require('./regroupe-phrases');
 
-const main = () => {
+const filterMethod = R.curry((list, brink) =>
+  (list.score >= brink));
+
+const filterTabTest = (phrases, brink) => R.pipe(
+  R.filter(filterMethod(R.__, brink)),
+  R.map(R.dissoc('score'))
+)(phrases);
+
+const main2 = async (path, perSameWord, perSamePhrase) => {
+  const phrases = await parseTextFile(path);
+  const tabTest = await filterTabTest(await main(path, perSameWord),
+    perSamePhrase);
+  console.log(tabTest);
   const cluster = [];
   cluster.push([[phrases[0]]]);
   phrases.forEach(p => {
@@ -25,7 +29,8 @@ const main = () => {
       cluster.forEach(cl => {
         cl.forEach(sousCl => {
           sousCl.forEach(pCl => {
-            if (nbMotsDansPhrase_(p) === nbMotsDansPhrase_(pCl) &&
+            if (tabTest.find(obj => obj.sentence1 === p &&
+              obj.sentence2 === pCl) !== undefined &&
               test === false) {
               sousCl.push(p);
               test = true;
@@ -42,4 +47,4 @@ const main = () => {
   console.log(cluster);
 };
 
-main();
+main2('input/fichiers-texte/phrases_autre.txt', 50, 50);

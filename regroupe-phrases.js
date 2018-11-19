@@ -1,6 +1,6 @@
 const R = require('ramda');
 const {
-  parseFile,
+  parseTextFile,
   cleanPhrases,
   mapP,
   mapC,
@@ -8,7 +8,6 @@ const {
   delDouble,
   similarity
 } = require('./lib/fonction-util');
-const Save = require('./lib/result-save');
 
 const testAlmostSame = elm => {
   return (
@@ -25,7 +24,7 @@ const testAlmostSame = elm => {
 };
 
 const clusterWordsBySimilarity_ = (path, brink) => R.pipeP(
-  parseFile,
+  parseTextFile,
   R.map(cleanPhrases),
   R.map(R.split(' ')),
   R.flatten,
@@ -42,7 +41,7 @@ const clusterWordsBySimilarity_ = (path, brink) => R.pipeP(
 )(path);
 
 const cleanSentences_ = R.pipeP(
-  parseFile,
+  parseTextFile,
   R.map(cleanPhrases)
 );
 
@@ -94,21 +93,24 @@ const main = async (path, brink) => {
   const listSplit = await
   cleanSentences_(path);
 
-  const sentencesClustered =
-    clusterSentences(sameWords, listSplit).sort((a, b) => {
-      return b.score - a.score;
-    }).filter(list => {
-      return list.score >= 0;
-    });
-
-  return sentencesClustered;
+  return clusterSentences(sameWords, listSplit).sort((a, b) => {
+    return b.score - a.score;
+  }).filter(list => {
+    return list.score >= 0;
+  });
 };
 
-const saveAsCSV = res => {
+/* -- const saveAsCSV = res => {
   const endTest = new Save('/Users/Victor/Documents/ESME Sudria/B5/test/',
     'Test', ['Phrase1', 'Phrase2', '% ressemblance']);
   endTest.data = res;
   endTest.saveAsCsv();
+}; */
+
+/* -- const main2 = async () => {
+  console.log(await main('input/fichiers-texte/phrases_autre.txt', 50));
 };
 
-saveAsCSV(main('input/fichiers-texte/phrase_aleatoire.txt', 85));
+main2(); */
+
+module.exports = {main};
