@@ -9,7 +9,8 @@ const getDataClusterized = ({data, nbOfCluster}) => {
   return output;
 };
 
-const randHandler = msg => ({
+/* eslint-disable-next-line require-await */
+const randHandler = async msg => ({
   status: 200,
   body: JSON.stringify(getDataClusterized(JSON.parse(msg.body)))
 });
