@@ -1,0 +1,14 @@
+service: rand
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  rand:
+    handler: rand.randHandler
+    events:
+    - http: POST /rand
+
+plugins:
+- serverless-offline
