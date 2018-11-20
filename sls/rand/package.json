@@ -1,0 +1,13 @@
+{
+  "name": "rand",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "serverless offline start --host 0.0.0.0"
+  },
+  "devDependencies": {
+    "serverless": "^1.33.2",
+    "serverless-offline": "^3.31.3"
+  }
+}
