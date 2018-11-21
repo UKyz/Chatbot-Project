@@ -86,7 +86,7 @@ const turnToPercent = (nbPoints, length) => {
   return Math.round((nbPoints / length) * 1000) / 10;
 };
 
-const main = async (path, brink) => {
+const regroupePhrase = async (path, brink) => {
   const sameWords = await
   clusterWordsBySimilarity_(path, brink);
 
@@ -108,9 +108,10 @@ const main = async (path, brink) => {
 }; */
 
 /* -- const main2 = async () => {
-  console.log(await main('input/fichiers-texte/phrases_autre.txt', 50));
+  console.log(await regroupePhrase('input/fichiers-texte/phrases_autre.txt',
+  50));
 };
 
 main2(); */
 
-module.exports = {main};
+module.exports = {regroupePhrase};
