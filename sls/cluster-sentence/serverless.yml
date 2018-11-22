@@ -1,18 +1,14 @@
-service: rand
+service: cluster-sentence
 
 provider:
   name: aws
   runtime: nodejs8.10
 
 functions:
-  rand:
-    handler: rand.randHandler
-    events:
-    - http: POST /rand
   clusterSentence:
     handler: cluster-sentence.clusterize
     events:
-    - http: POST /clusterSentence
+    - http: POST /cluster-sentence
 
 plugins:
 - serverless-offline
