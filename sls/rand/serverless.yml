@@ -9,6 +9,10 @@ functions:
     handler: rand.randHandler
     events:
     - http: POST /rand
+  clusterSentence:
+    handler: cluster-sentence.clusterize
+    events:
+    - http: POST /clusterSentence
 
 plugins:
 - serverless-offline
