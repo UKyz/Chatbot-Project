@@ -1,6 +1,5 @@
 const R = require('ramda');
 const {
-  parseTextFile,
   cleanPhrases,
   mapP,
   mapC,
@@ -23,9 +22,8 @@ const testAlmostSame = elm => {
   );
 };
 
-const clusterWordsBySimilarity_ = (path, brink) => R.pipeP(
-  parseTextFile,
-  R.map(cleanPhrases),
+const clusterWordsBySimilarity_ = (sentences, brink) => R.pipe(
+  // R.tap(console.log),
   R.map(R.split(' ')),
   R.flatten,
   R.countBy(R.toLower),
@@ -38,12 +36,7 @@ const clusterWordsBySimilarity_ = (path, brink) => R.pipeP(
   R.sort(R.descend(R.prop(2))),
   R.map(R.dropLast(1)),
   R.filter(testAlmostSame),
-)(path);
-
-const cleanSentences_ = R.pipeP(
-  parseTextFile,
-  R.map(cleanPhrases)
-);
+)(sentences);
 
 const clusterSentences = (wordList, sentenceList) => {
   const listReturn = [];
@@ -86,18 +79,26 @@ const turnToPercent = (nbPoints, length) => {
   return Math.round((nbPoints / length) * 1000) / 10;
 };
 
-const regroupePhrase = async (path, brink) => {
+const cleanSentences_ = R.pipe(
+  R.filter(R.complement(R.isNil)),
+  R.map(cleanPhrases)
+);
+
+const regroupePhrase = async (sentences, brink) => {
+  // Console.log(`sentences : ${sentences}`);
   const sameWords = await
-  clusterWordsBySimilarity_(path, brink);
+  clusterWordsBySimilarity_(sentences, brink);
 
-  const listSplit = await
-  cleanSentences_(path);
+  // Console.log(sameWords);
 
-  return clusterSentences(sameWords, listSplit).sort((a, b) => {
-    return b.score - a.score;
-  }).filter(list => {
-    return list.score >= 0;
-  });
+  const listSplit = await cleanSentences_(sentences);
+
+  return clusterSentences(sameWords, listSplit)
+    .sort((a, b) => {
+      return b.score - a.score;
+    }).filter(list => {
+      return list.score >= 0;
+    });
 };
 
 /* -- const saveAsCSV = res => {
