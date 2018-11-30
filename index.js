@@ -3,6 +3,8 @@ const R = require('ramda');
 const rp = require('request-promise');
 const {parseCsvFile} = require('./lib/fonction-util');
 const {regroupePhrase} = require('./regroupe-phrases');
+const {getCsvData} = require('./lib/confusion-matrix-csv');
+// -- const fs = require('fs-extra');
 
 const filterMethod = R.curry((list, brink) =>
   (list.score >= brink));
@@ -33,24 +35,35 @@ const filterNumber = (sentences, arrayFilter) => {
   return tab;
 };
 
-const testClusterSentences = async (pathes, perSameWord, perSamePhrase) => {
+const testClusterSentences = async (pathes, perSameWord, perSamePhrase,
+  nbSentences) => {
   let tabFR = await parseCsvFile(pathes[0], ',', 'x');
-  const arrayFR = randomArray(50, tabFR.length);
+  const arrayFR = randomArray(nbSentences, tabFR.length);
   tabFR = filterNumber(tabFR, arrayFR);
   let tabEN = await parseCsvFile(pathes[1], ',', 'x');
-  const arrayEN = randomArray(50, tabEN.length);
+  const arrayEN = randomArray(nbSentences, tabEN.length);
   tabEN = filterNumber(tabEN, arrayEN);
 
-  // -- const tabClExpected = [tabFR, tabEN];
+  const tabClExpected = [tabFR, tabEN];
   const tabMix = tabFR.concat(tabEN);
 
-  const tabTest = await filterTabTest(await regroupePhrase(tabMix, perSameWord),
-    perSamePhrase);
+  const tabTest = await filterTabTest(await regroupePhrase(tabMix,
+    perSameWord), perSamePhrase);
 
-  console.log(await clusterFunction(tabMix, tabTest));
+  const output = await clusterFunction(tabMix, tabTest);
+
+  console.log(output);
+
+  await getCsvData(tabClExpected, ['Set FR', 'Set EN'],
+    output);
+
+  /* -- fs.writeFileSync('/Users/Victor/Documents/ESME' +
+   ' Sudria/B5/test/testWallah2.csv',
+    await getCsvData(tabClExpected, ['Set FR', 'Set EN'],
+    await clusterFunction(tabMix, tabTest))); */
 };
 
 testClusterSentences(
   ['input/fichiers-csv/CorpusRandomTwitter/randomtweets1.csv',
     'input/fichiers-csv/CorpusRandomTwitter/randomtweets3.csv'],
-  50, 10);
+  50, 40, 100);
