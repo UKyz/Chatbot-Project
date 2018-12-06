@@ -37,18 +37,7 @@ const getResult = R.pipe(
 const clustering = R.curry((nbClusters, data) => turf.clustersKmeans(data,
   {numberOfClusters: nbClusters}));
 
-const dataSet = [
-  {company: 'Microsoft', size: 91259, revenue: 60420},
-  {company: 'SAP', size: 48000, revenue: 11567},
-  {company: 'Skype', size: 700, revenue: 716},
-  {company: 'Yahoo!', size: 14000, revenue: 6426},
-  {company: 'eBay', size: 15000, revenue: 8700},
-  {company: 'IBM', size: 400000, revenue: 98787}
-];
-
-const eqTab = {company: 'text', size: 'x', revenue: 'y'};
-
-const kmeans = (data, tableEq, nbClusters) => R.pipe(
+const kmeans = ({data, tableEq, nbClusters}) => R.pipe(
   preparedata(tableEq),
   clustering(nbClusters),
   getResult,
@@ -56,6 +45,10 @@ const kmeans = (data, tableEq, nbClusters) => R.pipe(
   R.tap(console.log),
 )(data);
 
-kmeans(dataSet, eqTab, 3);
+/* eslint-disable-next-line require-await */
+const kmeansMethode = async msg => ({
+  status: 200,
+  body: JSON.stringify(kmeans(JSON.parse(msg.body)))
+});
 
-module.exports = {kmeans};
+module.exports = {kmeansMethode};
