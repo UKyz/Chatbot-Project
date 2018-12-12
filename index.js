@@ -1,12 +1,14 @@
 const R = require('ramda');
-
 const rp = require('request-promise');
-const {parseTextFile, parseFile, listAllWordsInSentences} = require(
+
+const {parseCsvFile, parseFile, listAllWordsInSentences} = require(
   './lib/fonction-util');
 const {regroupePhrase} = require('./regroupe-phrases');
 const {getIndicator} = require('./lib/indicator');
-
+const {getCsvData} = require('./lib/confusion-matrix-csv');
+// -- const fs = require('fs-extra');
 const inputPath = 'input/fichiers-texte/phrases_autre.txt';
+
 
 const filterMethod = R.curry((list, brink) =>
   (list.score >= brink));
@@ -23,14 +25,52 @@ const clusterFunction = (phrases, tabTest) => {
   });
 };
 
-const testClusterSentences = async (path, perSameWord, perSamePhrase) => {
-  const phrases = await parseTextFile(path);
-  const tabTest = await filterTabTest(await regroupePhrase(path, perSameWord),
-    perSamePhrase);
-  console.log(await clusterFunction(phrases, tabTest));
+const randomArray = (length, max) => [...new Array(length)]
+  .map(() => Math.round(Math.random() * max));
+
+const filterNumber = (sentences, arrayFilter) => {
+  arrayFilter.sort((a, b) => {
+    return (a - b);
+  });
+  const tab = [];
+  arrayFilter.forEach(number => {
+    tab.push(sentences[number]);
+  });
+  return tab;
 };
 
-testClusterSentences(inputPath, 50, 50);
+const testClusterSentences = async (pathes, perSameWord, perSamePhrase,
+  nbSentences) => {
+  let tabFR = await parseCsvFile(pathes[0], ',', 'x');
+  const arrayFR = randomArray(nbSentences, tabFR.length);
+  tabFR = filterNumber(tabFR, arrayFR);
+  let tabEN = await parseCsvFile(pathes[1], ',', 'x');
+  const arrayEN = randomArray(nbSentences, tabEN.length);
+  tabEN = filterNumber(tabEN, arrayEN);
+
+  const tabClExpected = [tabFR, tabEN];
+  const tabMix = tabFR.concat(tabEN);
+
+  const tabTest = await filterTabTest(await regroupePhrase(tabMix,
+    perSameWord), perSamePhrase);
+
+  const output = await clusterFunction(tabMix, tabTest);
+
+  console.log(output);
+
+  await getCsvData(tabClExpected, ['Set FR', 'Set EN'],
+    output);
+
+  /* -- fs.writeFileSync('/Users/Victor/Documents/ESME' +
+   ' Sudria/B5/test/testWallah2.csv',
+    await getCsvData(tabClExpected, ['Set FR', 'Set EN'],
+    await clusterFunction(tabMix, tabTest))); */
+};
+
+testClusterSentences(
+  ['input/fichiers-csv/CorpusRandomTwitter/randomtweets1.csv',
+    'input/fichiers-csv/CorpusRandomTwitter/randomtweets3.csv'],
+  50, 40, 100);
 
 const getIndicatorSentence = (sentence, indicator) => R.pipe(
   listAllWordsInSentences,
@@ -61,3 +101,4 @@ const testKMeansMethode = async () => {
   console.log(dataSet);
 };
 testKMeansMethode();
+
