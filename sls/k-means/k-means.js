@@ -46,9 +46,9 @@ const kmeans = ({data, tableEq, nbClusters}) => R.pipe(
 )(data);
 
 /* eslint-disable-next-line require-await */
-const kmeansMethode = async msg => ({
+const kmeansMethod = async msg => ({
   status: 200,
   body: JSON.stringify(kmeans(JSON.parse(msg.body)))
 });
 
-module.exports = {kmeansMethode};
+module.exports = {kmeansMethod};
