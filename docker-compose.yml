@@ -7,7 +7,7 @@ services:
     ports:
     - "3010:3000"
   k-means:
-    build: sls/cluster-sentence
+    build: sls/k-means
     environment:
       - PORT=3000
     ports:

@@ -9,7 +9,6 @@ const {getCsvData} = require('./lib/confusion-matrix-csv');
 // -- const fs = require('fs-extra');
 const inputPath = 'input/fichiers-texte/phrases_autre.txt';
 
-
 const filterMethod = R.curry((list, brink) =>
   (list.score >= brink));
 

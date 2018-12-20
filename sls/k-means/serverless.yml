@@ -6,7 +6,7 @@ provider:
 
 functions:
   kmeans:
-    handler: k-means.kmeans
+    handler: k-means.kmeansMethod
     events:
     - http: POST /kmeans
 
