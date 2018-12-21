@@ -31,18 +31,16 @@ const getResult = R.pipe(
   R.groupBy(R.prop('cluster')),
   R.values,
   R.map(R.map(R.dissoc('cluster'))),
-  R.tap(console.log),
 );
 
 const clustering = R.curry((nbClusters, data) => turf.clustersKmeans(data,
   {numberOfClusters: nbClusters}));
 
-const kmeans = ({data, tableEq, nbClusters}) => R.pipe(
+const kmeans = (data, tableEq, nbClusters) => R.pipe(
   preparedata(tableEq),
   clustering(nbClusters),
   getResult,
   R.map(transform_(R.invertObj(tableEq))),
-  R.tap(console.log),
 )(data);
 
 /* eslint-disable-next-line require-await */
@@ -51,4 +49,4 @@ const kmeansMethod = async msg => ({
   body: JSON.stringify(kmeans(JSON.parse(msg.body)))
 });
 
-module.exports = {kmeansMethod};
+module.exports = {kmeansMethod, kmeans};

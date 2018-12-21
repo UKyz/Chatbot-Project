@@ -1,11 +1,11 @@
 const R = require('ramda');
-const kMeans = require('node-kmeans');
+const fs = require('fs-extra');
 
-const {getIndicator} = require('../lib/indicator');
-const {parseFile, listAllWordsInSentences} = require('../lib/fonction-util');
+const {getCsvData} = require('../lib/confusion-matrix-csv');
+const {parseCsvFile, listAllWordsInSentences} = require(
+  '../lib/fonction-util');
 const {plotDataClustered: plot} = require('../lib/plot');
-
-const pathFileIn = '../input/fichiers-texte/phrase_aleatoire.txt';
+const {kmeans} = require('../sls/k-means/k-means');
 
 const getIndicatorSentence = (sentence, indicator) => R.pipe(
   listAllWordsInSentences,
@@ -22,32 +22,43 @@ const essai1_ = R.curry((indicator, sentence) => ({
 const getDataObj_ = (sentences, indicator) => R.map(essai1_(indicator),
   sentences);
 
-const getVector = R.map(R.pipe(
-  R.values,
-  R.drop(1)
-));
-
-const process = async path => {
-  const sentences = await parseFile(path);
-  const indicator = await getIndicator(pathFileIn);
+const process = async () => {
+  const sentencesFR1 = await parseCsvFile(
+    'input/fichiers-csv/CorpusRandomTwitter/randomtweets1.csv',
+    ',', 'x');
+  console.log('parsing: 1/4');
+  const sentencesFR2 = await parseCsvFile(
+    'input/fichiers-csv/CorpusRandomTwitter/randomtweets2.csv',
+    ',', 'x');
+  console.log('parsing: 2/4');
+  const sentencesEN1 = await parseCsvFile(
+    'input/fichiers-csv/CorpusRandomTwitter/randomtweets3.csv',
+    ',', 'x');
+  console.log('parsing: 3/4');
+  const sentencesEN2 = await parseCsvFile(
+    'input/fichiers-csv/CorpusRandomTwitter/randomtweets4.csv',
+    ',', 'x');
+  console.log('parsing: 4/4');
+  const sentencesFR = R.concat(sentencesFR1, sentencesFR2);
+  const sentencesEN = R.concat(sentencesEN1, sentencesEN2);
+  const sentences = R.concat(sentencesFR, sentencesEN);
+  console.log('sentence ready');
+  const indicator = await fs.readJson('./indicatorENFR.json');
+  // Const indicator = getIndicator(sentences);
+  // fs.writeJson('./indicatorENFR.json', indicator);
+  console.log('indicator ready');
   const dataSet = getDataObj_(sentences, indicator);
-  kMeans.clusterize(getVector(dataSet), {k: 7}, (err, res) => {
-    const dataClustered = [];
-    if (err) {
-      console.error(err);
-    } else {
-      const clusterList = R.map(R.prop('clusterInd'), res);
-      clusterList.forEach(cluster => {
-        const tab = [];
-        cluster.forEach(index => {
-          tab.push(dataSet[index]);
-        });
-        dataClustered.push(tab);
-      });
-    }
-    console.log(dataClustered);
-    plot(dataClustered, {sentence: 'text', length: 'x', indicator: 'y'});
-  });
+  console.log('data object ready');
+  const eqTab = {sentence: 'text', length: 'x', indicator: 'y'};
+  const res = kmeans(dataSet, eqTab, 10);
+  fs.writeJson('./res.json', res);
+  const resToConfusionMatrix = R.map(R.map(R.prop('sentence')), res);
+  console.log('data clustered ready');
+  const buffer = getCsvData([sentencesFR, sentencesEN],
+    ['Set FR', 'Set EN'],
+    resToConfusionMatrix);
+  fs.writeFileSync('k_means.csv', buffer);
+  plot(res, eqTab);
 };
 
-process(pathFileIn);
+process();
